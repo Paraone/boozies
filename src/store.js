@@ -4,13 +4,8 @@ import {browserHistory} from 'react-router';
 import rootReducer from './reducers/index';
 
 const defaultState = {
-  users: [
-    {
-      username: 'Marcos',
-      password: 'password',
-      id: 1
-    }
-  ]
+  users: [],
+  games:[]
 }
 
 const store = createStore(rootReducer, defaultState);
