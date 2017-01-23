@@ -16,10 +16,18 @@ export function deleteUser(uid){
 
 }
 
-export function createGame(game){
+export function createGame(uid, room_name){
   return{
     type: 'CREATE_GAME',
-    game
+    uid,
+    room_name
+  }
+}
+
+export function getMessages(messages){
+  return{
+    type: 'GET_MESSAGES',
+    messages
   }
 }
 
@@ -27,5 +35,12 @@ export function getUsers(users){
   return{
     type: 'GET_USERS',
     users
+  }
+}
+
+export function getGames(games){
+  return{
+    type: 'GET_GAMES',
+    games
   }
 }

@@ -1,7 +1,6 @@
 function users(state = [], action){
   switch(action.type){
     case 'CREATE_USER':
-      console.log("Create user!!");
       return [
         ...state,
         {
@@ -11,7 +10,6 @@ function users(state = [], action){
         }
       ];
     case 'GET_USERS':
-      console.log("Getting users...", action);
       return action.users;
     case 'DELETE_USER':
       return [

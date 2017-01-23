@@ -15,13 +15,13 @@ class App extends Component {
       messagingSenderId: "18631566846"
     }
     firebase.initializeApp(config);
-
     const db = firebase.database();
-    db.ref('users/').on('value', (snapshot)=>{
-        //set initial state to snapshot.val()
-        console.log(snapshot.val());
-        this.props.getUsers(snapshot.val());
-      });
+    db.ref('/userstore/').on('value', (snapshot)=>{
+      this.props.getUsers(snapshot.val());
+    });
+    db.ref('/games').on('value', (snapshot)=>{
+      this.props.getGames(snapshot.val());
+    });
   }
 
   render() {

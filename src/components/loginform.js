@@ -14,10 +14,10 @@ class LoginForm extends React.Component{
 
         console.log(errorCode, errorMessage);
       }).then(()=>{
-        const user = firebase.auth().currentUser;
+        window.booziesuser = firebase.auth().currentUser;
         // user ? browserHistory.push('/games') : loginForm.reset();
-        if(user){
-          console.log(`User logged in as ${user.email}`)
+        if(window.booziesuser){
+          console.log(`User logged in as ${window.booziesuser.email}`)
           browserHistory.push('/games');
         }else{
           loginForm.reset();

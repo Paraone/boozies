@@ -6,7 +6,8 @@ import App from './App';
 function mapStateToProps(state){
   return{
     users: state.users,
-    games: state.games
+    games: state.games,
+    messages: state.messages
   }
 }
 

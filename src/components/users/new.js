@@ -16,16 +16,34 @@ class CreateUserForm extends React.Component{
     }).then(()=>{
       const user = firebase.auth().currentUser;
       if(user){
-        console.log(`creating ${username.value}. at /users/${user.uid}`);
-        user.updateProfile({
-          displayName: username.value
-        });
+
         const db = firebase.database();
-        db.ref(`users/${user.uid}`).set({
-          uid: user.uid,
+        const userkey = db.ref('userstore').push().key;
+
+        console.log(`creating ${username.value} at /userstore/${userkey}`);
+        user.updateProfile({
+          displayName: userkey
+        });
+
+
+        const userData = {
+          uid: userkey,
           username: username.value,
           email: email.value,
-        });
+          roomname: ""
+        }
+
+        const updates = {};
+        updates[`/userstore/${userkey}`] = userData;
+
+
+        db.ref().update(updates);
+
+        // db.ref(`userstore`).set({
+        //   uid: user.uid,
+        //   username: username.value,
+        //   email: email.value,
+        // });
         browserHistory.push('/');
       }else{
         this.refs.createUserForm.reset()

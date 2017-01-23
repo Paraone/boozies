@@ -9,8 +9,8 @@ class AllUsers extends React.Component{
         .map((key)=>{
           return(
             <div key={key}>
-              <h3>{this.props.users[key].username}</h3>
-              <div>{this.props.users[key].email}</div>
+              <h4>{this.props.users[key].username}</h4>
+              <div>{this.props.users[key].gameroom}</div>
             </div>
           )
         })
