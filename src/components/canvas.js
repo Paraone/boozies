@@ -219,7 +219,7 @@ class Canvas extends Component{
         this[`player_${id}`] = new PIXI.Graphics();
         const player = this[`player_${id}`];
         player.beginFill(color);
-        player.drawCircle(0, 0, 32);
+        player.drawCircle(0, 0, 16);
         player.endFill();
         player.x = this.players[id].x;
         player.y = this.players[id].y;
@@ -279,7 +279,7 @@ class Canvas extends Component{
     const dx = p1.x - p2.x;
     const dy = p1.y - p2.y;
     const distance = Math.sqrt(dx * dx + dy * dy);
-    return distance < p1.width;
+    return distance < p1.width/2 + p2.width/2;
   }
 
   //animate loop
@@ -314,7 +314,7 @@ class Canvas extends Component{
       if(game.players[id].playerstate === 'IT' && this[`player_${id}`].playerstate !== 'IT'){
         this[`player_${id}`].clear();
         this[`player_${id}`].beginFill(0xffff00);
-        this[`player_${id}`].drawCircle(0, 0, 32);
+        this[`player_${id}`].drawCircle(0, 0, 18);
         this[`player_${id}`].endFill();
         this[`player_${id}`].playerstate === 'IT';
       }
