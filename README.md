@@ -13,11 +13,11 @@ Tech Used:
 
 	Frameworks:
 
-	-ReactJS
+	-ReactJS https://facebook.github.io/react/
 
 	APIs:
 
-	-Firebase
+	-Firebase https://firebase.google.com/
 
 	Runtime Environment:
 
@@ -25,10 +25,10 @@ Tech Used:
 
 	Dependencies:
 
-	-pixi.js
-	-firebase
-	-redux
-	-react-redux
+	-pixi.js http://www.pixijs.com/
+	-firebase https://firebase.google.com/
+	-redux http://redux.js.org/
+	-react-redux https://github.com/reactjs/react-redux
 
 Approach:
 
@@ -37,13 +37,13 @@ Approach:
 	2. Next was to implement pixi.js to create a gameroom.
 	3. Finally game logic implementation
 
-installation:
+Installation:
 
 	go to: 
 
 	https://boozies.000webhostapp.com
 
-unsolved problems:
+Unsolved Problems:
 
 	-There are some bugs when players leave a room and 
 	return to lobby.
@@ -64,6 +64,12 @@ MVP:
 	Users and games stored in database
 	Create games GUI using react and pixi.js
 
+Special thanks to:
 
+	https://github.com/kittykatattack/learningPixi
+
+	http://www.rinconstrategies.io/using-react-and-pixijs.html
+
+	http://wesbos.com/
 
 
