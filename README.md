@@ -12,6 +12,15 @@ players needed to play a successful game.
 Screen Shots:
 
 ![readystate](./readystate.png)
+Ready State
+
+![bobsit](./bobsit.png)
+BobBuilder has the boozies!
+
+![winState](./winState.png)
+BobBuilder caught ParaOne
+Jared Wins!
+
 
 Tech Used:
 
