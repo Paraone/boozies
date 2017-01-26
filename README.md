@@ -2,12 +2,16 @@
 
 Boozies is a 2D multiplayer game based on the classic game 
 Tag. Users can login and create gamerooms. Others can join 
-a created room. when player are ready you hit the start 
+a created room. When players are ready you hit the start 
 button and the game begins. One person is chosen at random
 to be "it". The game continues in a help-tag fashion. players
 tag other players until there is only one who is not "it".
 That player wins the game. 3 players is the minimum amount of
 players needed to play a successful game.
+
+Screen Shots:
+
+![readystate](./readystate.png)
 
 Tech Used:
 
@@ -29,6 +33,7 @@ Tech Used:
 	-firebase https://firebase.google.com/
 	-redux http://redux.js.org/
 	-react-redux https://github.com/reactjs/react-redux
+	-react-router 
 
 Approach:
 
@@ -62,7 +67,13 @@ MVP:
 	An online multiplayer game.
 	Deployed at boozies.000webhost.com
 	Users and games stored in database
-	Create games GUI using react and pixi.js
+	Create games UI using react and pixi.js
+
+User Stories:
+
+	The user of this app is someone who enjoys mutiplayer games
+	with friends. User is able to create an account and chat with
+	friends.
 
 Special thanks to:
 
