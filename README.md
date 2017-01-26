@@ -17,7 +17,7 @@ Ready State
 ![bobsit](./bobsit.png)
 BobBuilder has the boozies!
 
-![winState](./winState.png)
+![winState](./WinState.png)
 BobBuilder caught ParaOne
 Jared Wins!
 
