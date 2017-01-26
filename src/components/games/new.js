@@ -1,5 +1,6 @@
 import React from 'react';
 // this is the create game form.
+// ********** this form is not being used *****************
 class CreateGameForm extends React.Component{
   handleSubmit(e){
     e.preventDefault();

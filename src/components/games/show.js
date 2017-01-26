@@ -14,26 +14,26 @@ class ShowGame extends React.Component{
   }
 
   componentWillMount() {
+    // getting reference to current user in db
     const user = firebase.auth().currentUser;
       if(user) this.userkey = user.displayName;
+    // refernce to db
     this.db = firebase.database();
   }
 
   closeRoom(){
+    //changes gamestate to closing
     console.log('closing room ...');
-    const players = this.props.games[this.props.params.id].players;
-    for(let uid in players){
-      this.db.ref(`/userstore/${uid}/roomname`).remove();
-    }
-    this.db.ref(`/games/${this.props.params.id}`).remove().then(()=>{
-      browserHistory.push('/games');
-    });
+    const updates = {};
+    updates[`/games/${this.props.params.id}/gamestate`] = 'closing';
+    this.db.ref().update(updates);
   }
 
-  startGame(){
+  startGame(){//changes gamestate to playing
+    // ref to current players
     const players = this.props.games[this.props.params.id].players;
-    const playersarr = Object.keys(players);
-    const uid = randomInt(0, playersarr.length-1 );
+    const playersarr = Object.keys(players);// get player ids
+    const uid = randomInt(0, playersarr.length-1 ); // get ref to random uid
 
     const updates = {};
     updates[`/games/${this.props.params.id}/gamestate`] = 'playing';

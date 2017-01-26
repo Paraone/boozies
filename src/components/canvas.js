@@ -9,17 +9,22 @@ class Canvas extends Component{
   constructor(props) {
     super(props);
 
-
+    //setting stage values
     this.stageheight = 768;
     this.stagewidth = 1024;
+    //binding functions
     this.animate = this.animate.bind(this);
     this.checkCollisions = this.checkCollisions.bind(this);
   }
 
   componentWillMount() {
+    // db reference
     this.db = firebase.database();
+    // currentGame's id
     this.currentGame = this.props.params.id;
+    // flag to check wether to run animate()
     this.running = true;
+    //winner's name
     this.winner = "";
   }
 
@@ -40,29 +45,32 @@ class Canvas extends Component{
     this.animate();
   }
   componentWillUnmount() {
+    //stop animate()
     this.running = false;
   }
 
   //shouldComponentUpdate is used to check our new props against the current
   shouldComponentUpdate(nextProps, nextState) {
-    return true;
+    return this.props !== nextProps; //check if props have changed
   }
 
   //When props are new run appropriate function
   componentWillReceiveProps(nextProps) {
-   // this.updateZoomLevel(nextProps);
+   //pass props to update player
    this.updatePlayers(nextProps);
   }
 
   setup(){
-    const uid = this.props.userkey;
-    const player = this[`player_${uid}`];
+    const uid = this.props.userkey; //current user
+    const player = this[`player_${uid}`]; //current user's circle graphic
     // this.player is the players in our game
     if(this.props){
-      this.players = this.props.games[this.currentGame].players;
+      this.players = this.props.games[this.props.params.id].players;
       this.playerlist = [];
-      var seperator = 0;
     }
+
+    // setting up keyboard keys
+    // custom function addapted from https://github.com/kittykatattack/learningPixi
     this.left_key = new Keyboard(37);
     this.up_key = new Keyboard(38);
     this.right_key =  new Keyboard(39);
@@ -139,12 +147,14 @@ class Canvas extends Component{
       );
     }
 
+    // creating gameScene
     this.gameScene = new PIXI.Container();
-    this.stage.addChild(this.gameScene);
+    this.stage.addChild(this.gameScene);//add gameScene to stage
 
+    // creating gameOverScene
     this.gameOverScene = new PIXI.Container();
     this.gameOverScene.visible = false;
-    this.stage.addChild(this.gameOverScene);
+    this.stage.addChild(this.gameOverScene);//add gameOverScene to page
 
     // set background
     const bg = new PIXI.Graphics();
@@ -165,34 +175,33 @@ class Canvas extends Component{
   }
 
   movePlayer(){
-    const uid = this.props.userkey;
-    const player = this[`player_${uid}`];
 
-    let deccel = 0.07;
+    const uid = this.props.userkey;//reference to current user
+    const player = this[`player_${uid}`];//current user's character
 
+    let deccel = 0.1; //stopping inertia
 
-
-    player.vx += player.accelx;
+    player.vx += player.accelx; //adding accel to velocity
     player.vy += player.accely;
 
-    if(player.vx <0) player.vx += deccel;
+    if(player.vx <0) player.vx += deccel; //stopping inertia
     if(player.vx >0) player.vx -= deccel;
 
     if(player.vy <0) player.vy += deccel;
     if(player.vy >0) player.vy -= deccel;
 
-    if(player.vx > 7) player.vx = 7;
+    if(player.vx > 7) player.vx = 7; // limiting velocity
     if(player.vx < -7) player.vx = -7;
 
     if(player.vy > 7) player.vy = 7;
     if(player.vy < -7) player.vy = -7;
 
-    player.x += player.vx;
+    player.x += player.vx; // updating x value
     player.y += player.vy;
 
-    if(player.x < 0){
-      player.x = this.stage.width-32;
-    }else if(player.x > this.stagewidth){
+    if(player.x < 0){ // setting stage boundries
+      player.x = this.stage.width-32;//player will end up on
+    }else if(player.x > this.stagewidth){// opposite side of stage
       player.x = 32;
     }
 
@@ -202,19 +211,23 @@ class Canvas extends Component{
       player.y = 32;
     }
 
-    this[`text_${uid}`].x = player.x;
+    this[`text_${uid}`].x = player.x; // updating username text x,y coord
     this[`text_${uid}`].y = player.y + 32;
 
-    const updates = {}
+    const updates = {} // sending updates to db
     updates[`/games/${this.props.params.id}/players/${this.props.userkey}/x`] = player.x;
     updates[`/games/${this.props.params.id}/players/${this.props.userkey}/y`] = player.y;
     this.db.ref().update(updates);
   }
 
+  //adds player to stage
   addPlayers(){
+    // current players obj
     this.players = this.props.games[this.props.params.id].players;
     Object.keys(this.players).forEach((id, i)=>{
+      // if current player color is white otherwise blue
       const color = (id === this.props.userkey) ? 0xffffff : 0x0000ff;
+      // if player is not included in playerlist add graphics
       if(!this.playerlist.includes(id)){
         this[`player_${id}`] = new PIXI.Graphics();
         const player = this[`player_${id}`];
@@ -231,8 +244,9 @@ class Canvas extends Component{
         const fontstyle = {
           fontFamily: "Arial",
           fontSize: 20,
-          fontFill: 0xffffff
+          fontFill: 0xffffff //for some reason text always appears black
         }
+        // players username attached to player
         this[`text_${id}`] = new PIXI.Text(this.props.users[id].username, fontstyle);
         this[`text_${id}`].x = this.players[id].x;
         this[`text_${id}`].y = this.players[id].y - 48;
@@ -245,8 +259,9 @@ class Canvas extends Component{
 
   //update this.players
   updatePlayers(props){
+    // updating players x and y values
     Object.keys(this.players).forEach((id)=>{
-      if(id !== this.props.userkey){
+      if(id !== this.props.userkey){ // do not update current player
       this[`player_${id}`].x = props.games[this.props.params.id].players[id].x;
       this[`player_${id}`].y = props.games[this.props.params.id].players[id].y;
 
@@ -256,17 +271,22 @@ class Canvas extends Component{
     });
   }
 
+  //checking collisions with the boozied players
   checkCollisions(){
+    //current user id
     const uid = this.props.userkey;
+    // current players gfx
     const player = this[`player_${uid}`];
+    // getting list of boozied player
     const boozies = Object.keys(this.props.games[this.currentGame].players).filter((id)=>{
       return this.props.games[this.currentGame].players[id].playerstate === 'IT';
     });
 
+    // checking for collision against boozied if current player is not boozied
     if(!boozies.includes(uid)){
       boozies.forEach((id)=>{
         if(this.circleHit(player, this[`player_${id}`])){
-
+          //changing current player to boozied in db if caught
           const updates = {};
           updates[`/games/${this.currentGame}/players/${uid}/playerstate`] = 'IT';
           this.db.ref().update(updates);
@@ -275,8 +295,8 @@ class Canvas extends Component{
     }
   }
 
-  circleHit(p1, p2){
-    const dx = p1.x - p2.x;
+  circleHit(p1, p2){ // circle collision detection
+    const dx = p1.x - p2.x; // Thanks MDN
     const dy = p1.y - p2.y;
     const distance = Math.sqrt(dx * dx + dy * dy);
     return distance < p1.width/2 + p2.width/2;
@@ -284,7 +304,6 @@ class Canvas extends Component{
 
   //animate loop
   animate(){
-    if(!this.props.games[this.currentGame]) browserHistory.push('/games');
     //update gamestate
     this.gameState();
     //render the stage
@@ -309,8 +328,10 @@ class Canvas extends Component{
 
   //gamestate functions
   playing(){
+    // reference to current game
     const game = this.props.games[this.currentGame];
     Object.keys(game.players).forEach((id)=>{
+      //changing player graphix if not yet changed
       if(game.players[id].playerstate === 'IT' && this[`player_${id}`].playerstate !== 'IT'){
         this[`player_${id}`].clear();
         this[`player_${id}`].beginFill(0xffff00);
@@ -328,12 +349,12 @@ class Canvas extends Component{
       .filter((id)=>{
         return this.props.games[this.currentGame].players[id].playerstate !== 'IT';
       });
-    console.log(playersleft);
+    // end game if only 1 player is not "it"
     if(playersleft.length === 1){
       const winner = this.props.users[playersleft[0]].username;
 
       this.winnertext.text = `${winner} is the WINNER!!!!`
-      const updates = {};
+      const updates = {};// updating gamestate
       updates[`/games/${this.currentGame}/gamestate`] = 'gameover';
       this.db.ref().update(updates);
     }
@@ -345,12 +366,31 @@ class Canvas extends Component{
 
   //gameover()
   gameover(){
+    // current game
+    const game = this.props.games[this.currentGame];
+    // change game scene
     this.gameScene.visible = false;
     this.gameOverScene.visible = true;
+    // change gamestate if gamestate changes
+    if(game.gamestate !== 'gameover'){
+      this.gamestate = this[game.gamestate];
+    }
   }
 
   closing(){
+    // current game
+    const game = this.props.games[this.currentGame];
+    // removing players from room
     if(this.currentGame !== this.props.userkey) browserHistory.push('/games');
+    // removing roomname from users in db
+    const players = this.props.games[this.currentGame].players;
+    for(let uid in players){
+      this.db.ref(`/userstore/${uid}/roomname`).remove();
+    }
+    //removing game from db and redirecting current user to lobby
+    this.db.ref(`/games/${this.props.params.id}`).remove().then(()=>{
+      browserHistory.push('/games');
+    });
   }
 
   //Render our container that will store our pixijs game canvas. store ref

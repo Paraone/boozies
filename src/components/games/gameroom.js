@@ -30,11 +30,13 @@ class GameRoom extends React.Component{
     const db = firebase.database();
 
     let updates = {};
+    // add current player
     updates[`/games/${this.props.i}/players/${this.props.userkey}`] = player;
+    // update roomname in users table
     updates[`/userstore/${this.props.userkey}/roomname`] = this.props.games[this.props.i].roomname;
     if(!this.props.games[this.props.i].players[this.props.userkey]) db.ref().update(updates);
     else{
-      console.log()
+      console.log("error joining room")
       return;
     }
     console.log("put player in room");

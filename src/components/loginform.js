@@ -6,7 +6,9 @@ class LoginForm extends React.Component{
   handleSubmit(e){
     e.preventDefault();
     console.log("Logging user in.");
+    // geting references to form
     const {email, password, loginForm} = this.refs;
+    //login user
     firebase.auth().signInWithEmailAndPassword(email.value, password.value)
       .catch((error)=>{
         const errorCode = error.code;
@@ -14,18 +16,20 @@ class LoginForm extends React.Component{
 
         console.log(errorCode, errorMessage);
       }).then(()=>{
-        window.booziesuser = firebase.auth().currentUser;
+        this.booziesuser = firebase.auth().currentUser;
         // user ? browserHistory.push('/games') : loginForm.reset();
-        if(window.booziesuser){
-          console.log(`User logged in as ${window.booziesuser.email}`)
+        if(this.booziesuser){
+          console.log(`User logged in as ${this.booziesuser.email}`)
+          //redirecting to lobby
           browserHistory.push('/games');
-        }else{
+        }else{// if user not logged in reset form
           loginForm.reset();
         }
       });
   }
 
   componentWillMount() {
+    // if user is logged in redirect to lobby
     firebase.auth().onAuthStateChanged((user)=>{
     if(user) browserHistory.push('/games');
     });
